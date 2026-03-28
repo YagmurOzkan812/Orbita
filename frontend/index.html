@@ -4,17 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ORBITA</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
       margin: 0;
       min-height: 100vh;
-      background-image: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), url("satellite.jpg");
+      background-image:
+        radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 35%),
+        linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.82)),
+        url("satellite.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -22,55 +20,117 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 28px;
     }
-
     .container {
+      width: 100%;
+      max-width: 880px;
       text-align: center;
-      max-width: 700px;
-      padding: 32px;
+      padding: 40px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 28px;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
     }
-
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.16);
+      border: 1px solid rgba(96,165,250,0.32);
+      color: #bfdbfe;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
     h1 {
-      font-size: 56px;
-      margin-bottom: 12px;
-      letter-spacing: 2px;
+      font-size: clamp(48px, 8vw, 76px);
+      margin: 0 0 14px;
+      letter-spacing: 3px;
     }
-
     .subtitle {
       color: #e2e8f0;
-      margin-bottom: 32px;
-      font-size: 20px;
+      margin: 0 auto 28px;
+      font-size: 21px;
+      line-height: 1.6;
+      max-width: 680px;
+    }
+    .features-title {
+      color: #93c5fd;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto 34px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .features li {
+      padding: 18px 16px;
+      border-radius: 18px;
+      background: rgba(30, 41, 59, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      color: #f8fafc;
+      box-shadow: 0 12px 24px rgba(2, 6, 23, 0.22);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       line-height: 1.5;
     }
-
-    button {
-      padding: 16px 32px;
+    .features li:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 32px rgba(2, 6, 23, 0.35);
+      border-color: rgba(96, 165, 250, 0.34);
+    }
+    .feature-icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .cta {
+      padding: 16px 34px;
       font-size: 18px;
       border: none;
-      border-radius: 12px;
-      background: #3b82f6;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
       color: white;
       cursor: pointer;
       font-weight: bold;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 14px 32px rgba(37, 99, 235, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
     }
-
-    button:hover {
-      opacity: 0.92;
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(37, 99, 235, 0.42);
+      opacity: 0.98;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 28px 22px; }
+      .features { grid-template-columns: 1fr; }
+      .subtitle { font-size: 18px; }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
+    <div class="eyebrow">🛰️ Hackathon Demo • CubeSat Partner Intelligence</div>
     <h1>ORBITA</h1>
+    <p class="subtitle">Görev bazlı CubeSat partner seçimini hızlandıran, riskleri görünür kılan ve eksik yetkinlikleri anında ortaya çıkaran karar destek sistemi.</p>
 
-    <p class="subtitle">
-      Görev Bazlı CubeSat Partner Seçim Sistemi
-    </p>
+    <div class="features-title">Ne yapar bu sistem?</div>
+    <ul class="features">
+      <li><span class="feature-icon">🤝</span><strong>Smart Partner Matching</strong><br>Göreve en uygun şirketleri hızla öne çıkarır.</li>
+      <li><span class="feature-icon">⚠️</span><strong>Risk Analysis</strong><br>Uyumsuzluk ve operasyonel riskleri erken gösterir.</li>
+      <li><span class="feature-icon">📡</span><strong>Capability Gap Detection</strong><br>Eksik test ve kabiliyet alanlarını netleştirir.</li>
+    </ul>
 
-    <button onclick="window.location.href='./mission.html'">Başla</button>
+    <button class="cta" onclick="window.location.href='./mission.html'">Analize Başla</button>
   </div>
-
 </body>
 </html>

@@ -2,151 +2,348 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sonuçlar - ORBITA</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 30px;
-      font-family: Arial;
-      background: #0f172a;
+      padding: 30px 18px 42px;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(59,130,246,0.12), transparent 30%),
+        #0f172a;
       color: white;
     }
-
-    .container {
-      max-width: 1000px;
-      margin: auto;
+    .container { max-width: 1180px; margin: auto; }
+    .hero {
+      background: linear-gradient(135deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98));
+      padding: 24px;
+      border-radius: 22px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(148,163,184,0.14);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.3);
     }
-
-    .card {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
     }
-
-    .title {
-      font-size: 24px;
-      margin-bottom: 10px;
+    .hero-title { font-size: 30px; margin: 0 0 8px; }
+    .hero-subtitle { margin: 0; color: #cbd5e1; line-height: 1.6; }
+    .status-badge {
+      background: rgba(34,197,94,0.14);
+      border: 1px solid rgba(34,197,94,0.28);
+      color: #bbf7d0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      white-space: nowrap;
     }
-
-    .grid {
+    .summary-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
     }
-
+    .summary-item {
+      background: rgba(51,65,85,0.7);
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.12);
+      min-height: 82px;
+    }
+    .summary-label {
+      color: #93c5fd;
+      font-size: 13px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: bold;
+    }
+    .summary-value { color: #f8fafc; font-size: 17px; font-weight: bold; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.9fr) minmax(300px, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98));
+      padding: 22px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(148,163,184,0.14);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+    }
+    .card-title {
+      font-size: 21px;
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .partner {
-      background: #334155;
-      padding: 15px;
-      border-radius: 12px;
+      background: rgba(51,65,85,0.72);
+      padding: 18px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(148,163,184,0.12);
+      box-shadow: 0 10px 24px rgba(2,6,23,0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .partner:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 34px rgba(2,6,23,0.28);
+      border-color: rgba(96,165,250,0.22);
+    }
+    .partner-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 10px;
     }
-
-    .score {
-      background: #22c55e;
-      color: black;
-      padding: 5px 10px;
-      border-radius: 20px;
-      display: inline-block;
+    .company-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #dbeafe;
+      box-shadow: inset 0 0 0 1px rgba(147,197,253,0.18);
+    }
+    .company-name {
+      font-size: 20px;
+      color: #dbeafe;
+      font-weight: bold;
+      margin: 0;
+    }
+    .company-subtitle { color: #94a3b8; font-size: 13px; margin-top: 3px; }
+    .score-box {
+      min-width: 210px;
+      background: rgba(15,23,42,0.65);
+      border: 1px solid rgba(34,197,94,0.18);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .score-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #bbf7d0;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .score-value { color: #86efac; font-size: 16px; }
+    .score-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(148,163,184,0.18);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .score-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #4ade80);
+    }
+    .partner p {
+      margin: 12px 0 14px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tag.match {
+      background: rgba(6,78,59,0.9);
+      color: #6ee7b7;
+      border: 1px solid rgba(16,185,129,0.34);
+    }
+    .tag.missing {
+      background: rgba(69,10,10,0.9);
+      color: #fda4af;
+      border: 1px solid rgba(239,68,68,0.34);
+    }
+    .notice-list { display: grid; gap: 10px; }
+    .notice {
+      padding: 12px 14px;
+      border-radius: 14px;
+      line-height: 1.5;
+      font-size: 14px;
+      border-left: 4px solid;
+      background: rgba(15,23,42,0.52);
+    }
+    .notice.warn { border-color: #ef4444; color: #fecaca; }
+    .notice.gap { border-color: #facc15; color: #fde68a; }
+    .notice.safe { border-color: #22c55e; color: #bbf7d0; }
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin-top: 8px;
     }
-
-    .green { border-left: 5px solid #22c55e; }
-    .yellow { border-left: 5px solid #facc15; }
-    .red { border-left: 5px solid #ef4444; }
-
-    .summary-box {
-      background: #334155;
-      padding: 15px;
-      border-radius: 12px;
-      margin-top: 10px;
-      line-height: 1.8;
-    }
-
-    .summary-box strong {
-      color: #93c5fd;
-    }
-
     button {
-      padding: 12px;
+      padding: 14px;
       width: 100%;
-      border: none;
-      border-radius: 10px;
-      background: #475569;
-      color: white;
-      margin-top: 10px;
+      border-radius: 14px;
       cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
     }
-
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    button:hover { transform: translateY(-2px); opacity: 0.98; }
+    .btn-primary {
+      border: none;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      box-shadow: 0 14px 28px rgba(37,99,235,0.24);
+    }
+    .btn-outline {
+      background: transparent;
+      color: #e2e8f0;
+      border: 1.5px solid #64748b;
+    }
+    .loading-state,
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 38px 20px;
+      text-align: center;
+      color: #cbd5e1;
+    }
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 4px solid rgba(148,163,184,0.25);
+      border-top-color: #60a5fa;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 980px) {
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .summary-grid, .actions { grid-template-columns: 1fr; }
+      .hero, .card { padding: 18px; }
+      .score-box { min-width: 100%; }
     }
   </style>
 </head>
-
 <body>
 <div class="container">
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <h1 class="hero-title">Analiz Sonuçları</h1>
+        <p class="hero-subtitle">Partner uyumu, eksik yetkinlikler ve kritik riskler tek ekranda özetlendi.</p>
+      </div>
+      <div class="status-badge">🧠 ORBITA Analizi Hazır</div>
+    </div>
 
-  <div class="card">
-    <div class="title">Analiz Sonuçları</div>
-
-    <div class="summary-box">
-      <div><strong>Görev Türü:</strong> <span id="summaryMissionType"></span></div>
-      <div><strong>Platform Boyutu:</strong> <span id="summaryPlatformSize"></span></div>
-      <div><strong>Bütçe Seviyesi:</strong> <span id="summaryBudgetLevel"></span></div>
-      <div><strong>Thermal Test:</strong> <span id="summaryThermalTest"></span></div>
-      <div><strong>Vibration Test:</strong> <span id="summaryVibrationTest"></span></div>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="summary-label">Görev Türü</div><div id="summaryMissionType" class="summary-value">-</div></div>
+      <div class="summary-item"><div class="summary-label">Platform</div><div id="summaryPlatformSize" class="summary-value">-</div></div>
+      <div class="summary-item"><div class="summary-label">Bütçe</div><div id="summaryBudgetLevel" class="summary-value">-</div></div>
+      <div class="summary-item"><div class="summary-label">Thermal Test</div><div id="summaryThermalTest" class="summary-value">-</div></div>
+      <div class="summary-item"><div class="summary-label">Vibration Test</div><div id="summaryVibrationTest" class="summary-value">-</div></div>
     </div>
   </div>
 
-  <div class="grid">
-
-    <!-- 🟢 RECOMMENDATIONS -->
-    <div class="card green">
-      <div class="title">Önerilen Partnerler</div>
-      <div id="recommendations"></div>
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-title">🤝 Önerilen Partnerler</div>
+        <div id="recommendations">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <div><strong>Analiz ediliyor...</strong><br>Partner eşleşmeleri hazırlanıyor.</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div>
-
-      <!-- 🟡 MISSING -->
-      <div class="card yellow">
-        <div class="title">Eksik Kapasiteler</div>
-        <div id="missing"></div>
+      <div class="card">
+        <div class="card-title">🧩 Eksik Kapasiteler</div>
+        <div id="missing" class="notice-list">
+          <div class="loading-state" style="padding:20px 0;">
+            <div class="spinner" style="width:28px;height:28px;border-width:3px;"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- 🔴 RISKS -->
-      <div class="card red">
-        <div class="title">Riskler</div>
-        <div id="risks"></div>
+      <div class="card">
+        <div class="card-title">⚠️ Riskler</div>
+        <div id="risks" class="notice-list">
+          <div class="loading-state" style="padding:20px 0;">
+            <div class="spinner" style="width:28px;height:28px;border-width:3px;"></div>
+          </div>
+        </div>
       </div>
 
+      <div class="card">
+        <div class="card-title">📍 Sonraki Aksiyon</div>
+        <div class="notice-list">
+          <div class="notice safe">En yüksek uyumluluk skoruna sahip partnerleri kısa listeye al.</div>
+          <div class="notice gap">Eksik test ve kabiliyetler için tamamlayıcı partner veya dış kaynak planı oluştur.</div>
+          <div class="notice warn">Risk kartlarında geçen başlıkları teklif ve planlama aşamasında doğrula.</div>
+        </div>
+      </div>
     </div>
-
   </div>
 
-  <button onclick="window.location.href='mission.html'">Geri</button>
-
+  <div class="actions">
+    <button class="btn-outline" onclick="window.location.href='mission.html'">← Geri Dön</button>
+    <button class="btn-primary" onclick="window.location.href='index.html'">Ana Sayfaya Git</button>
+  </div>
 </div>
 
 <script>
 window.onload = function () {
-  // localStorage'dan veriyi alırken isimlerin senin Backend'deki MissionRequest.cs ile 
-  // uyumlu olduğundan emin olmalısınız. (Örn: requireThermal)
   const requestData = JSON.parse(localStorage.getItem("missionRequest"));
 
   if (!requestData) {
     alert("Veri bulunamadı");
+    window.location.href = "mission.html";
     return;
   }
 
+  document.getElementById("summaryMissionType").innerText = requestData.missionType || "-";
+  document.getElementById("summaryPlatformSize").innerText = requestData.platformSize || "-";
+  document.getElementById("summaryBudgetLevel").innerText = translateBudget(requestData.budgetLevel) || "-";
+  document.getElementById("summaryThermalTest").innerText = requestData.requireThermal ? "Gerekli" : "Yok";
+  document.getElementById("summaryVibrationTest").innerText = requestData.requireVibration ? "Gerekli" : "Yok";
+
   fetch("https://wpf06hz1-7206.euw.devtunnels.ms/api/Decision/evaluate", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(requestData)
   })
   .then(res => {
@@ -158,143 +355,127 @@ window.onload = function () {
   })
   .catch(err => {
     console.log("Bağlantı hatası:", err);
-    // Hata durumunda boş kalmaması için basit bir uyarı veya fake data eklenebilir
+    renderError();
   });
 };
 
-function renderResults(data, requestData) {
-  // Üst özet bilgilerini doldur
-  document.getElementById("summaryMissionType").innerText = data.missionType || "-";
-  document.getElementById("summaryPlatformSize").innerText = data.platformSize || "-";
-  // Backend'den gelen veriye göre (requireThermal/vibration isimlerine dikkat)
-  document.getElementById("summaryThermalTest").innerText = requestData.requireThermal ? "Evet" : "Hayır";
-  document.getElementById("summaryVibrationTest").innerText = requestData.requireVibration ? "Evet" : "Hayır";
+function translateBudget(value) {
+  const labels = { Low: "Düşük", Medium: "Orta", High: "Yüksek" };
+  return labels[value] || value;
+}
 
+function getInitials(name) {
+  if (!name) return "OP";
+  return name.split(" ").slice(0, 2).map(part => part[0]).join("").toUpperCase();
+}
+
+function normalizeScore(score) {
+  const parsed = Number(score);
+  if (Number.isNaN(parsed)) return 0;
+  return Math.max(0, Math.min(100, parsed));
+}
+
+function collectMissingCapabilities(data) {
+  const set = new Set();
+
+  if (Array.isArray(data.missingCapabilities)) {
+    data.missingCapabilities.forEach(item => item && set.add(item));
+  }
+
+  if (Array.isArray(data.recommendations)) {
+    data.recommendations.forEach(item => {
+      if (Array.isArray(item.missingFeatures)) {
+        item.missingFeatures.forEach(feature => feature && set.add(feature));
+      }
+    });
+  }
+
+  return Array.from(set);
+}
+
+function renderResults(data, requestData) {
   const recDiv = document.getElementById("recommendations");
   const riskDiv = document.getElementById("risks");
+  const missingDiv = document.getElementById("missing");
 
   recDiv.innerHTML = "";
   riskDiv.innerHTML = "";
+  missingDiv.innerHTML = "";
 
-  // 1. ŞİRKET KARTLARINI ÇİZ (Yeni etiketli sistem)
-  data.recommendations.forEach(item => {
-    // Yeşil Etiketler (Uyanlar)
-    const matchedHtml = item.matchedFeatures.map(f => 
-        <span style="background:#052e16; color:#22c55e; padding:3px 10px; border-radius:12px; font-size:11px; margin-right:5px; display:inline-block; margin-bottom:5px;">✓ ${f}</span>
-    ).join("");
-
-    // Kırmızı Etiketler (Eksikler)
-    const missingHtml = item.missingFeatures.map(f => 
-        <span style="background:#450a0a; color:#f87171; padding:3px 10px; border-radius:12px; font-size:11px; margin-right:5px; display:inline-block; margin-bottom:5px;">✗ ${f}</span>
-    ).join("");
-
-    recDiv.innerHTML += `
-      <div class="partner" style="margin-bottom:20px; border-bottom:1px solid #334155; padding-bottom:15px;">
-        <b style="font-size:18px; color:#93c5fd;">${item.companyName}</b>
-        <p style="margin:10px 0;">${item.explanation}</p>
-        <div class="features" style="margin-top:10px;">
-            <div>${matchedHtml}</div>
-            <div style="margin-top:5px;">${missingHtml}</div>
-        </div>
-        <div class="score" style="margin-top:10px; font-weight:bold; color:#22c55e;">Skor: ${item.score}</div>
+  if (!data.recommendations || data.recommendations.length === 0) {
+    recDiv.innerHTML = `
+      <div class="empty-state">
+        <div>Bu görev için partner önerisi bulunamadı.</div>
       </div>
     `;
-  });
-
-  // 2. GENEL RİSKLERİ ÇİZ
-  if(data.risks && data.risks.length > 0) {
-      data.risks.forEach(r => {
-        riskDiv.innerHTML += <p style="color:#f87171; font-size:14px;">⚠️ ${r}</p>;
-      });
   } else {
-      riskDiv.innerHTML = "<p>Düşük risk seviyesi.</p>";
+    data.recommendations.forEach(item => {
+      const score = normalizeScore(item.score);
+      const matchedHtml = (item.matchedFeatures || []).map(f => `
+        <span class="tag match">✓ ${f}</span>
+      `).join("");
+
+      const missingHtml = (item.missingFeatures || []).map(f => `
+        <span class="tag missing">✗ ${f}</span>
+      `).join("");
+
+      recDiv.innerHTML += `
+        <div class="partner">
+          <div class="partner-head">
+            <div class="company-wrap">
+              <div class="logo-badge">${getInitials(item.companyName)}</div>
+              <div>
+                <div class="company-name">${item.companyName || "İsimsiz Partner"}</div>
+                <div class="company-subtitle">Partner uyum değerlendirmesi</div>
+              </div>
+            </div>
+            <div class="score-box">
+              <div class="score-label">
+                <span>Uyumluluk Skoru</span>
+                <span class="score-value">${score}/100</span>
+              </div>
+              <div class="score-track">
+                <div class="score-fill" style="width:${score}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <p>${item.explanation || "Açıklama bulunmuyor."}</p>
+
+          ${matchedHtml ? `<div class="tag-row">${matchedHtml}</div>` : ""}
+          ${missingHtml ? `<div class="tag-row" style="margin-top:10px;">${missingHtml}</div>` : ""}
+        </div>
+      `;
+    });
+  }
+
+  const missingCapabilities = collectMissingCapabilities(data);
+  if (missingCapabilities.length > 0) {
+    missingCapabilities.forEach(item => {
+      missingDiv.innerHTML += `<div class="notice gap">🧩 ${item}</div>`;
+    });
+  } else {
+    missingDiv.innerHTML = `<div class="notice safe">Belirgin bir kapasite açığı tespit edilmedi.</div>`;
+  }
+
+  if (data.risks && data.risks.length > 0) {
+    data.risks.forEach(r => {
+      riskDiv.innerHTML += `<div class="notice warn">⚠️ ${r}</div>`;
+    });
+  } else {
+    riskDiv.innerHTML = `<div class="notice safe">Düşük risk seviyesi tespit edildi.</div>`;
   }
 }
-</script><script>
-window.onload = function () {
-  // localStorage'dan veriyi alırken isimlerin senin Backend'deki MissionRequest.cs ile 
-  // uyumlu olduğundan emin olmalısınız. (Örn: requireThermal)
-  const requestData = JSON.parse(localStorage.getItem("missionRequest"));
 
-  if (!requestData) {
-    alert("Veri bulunamadı");
-    return;
-  }
-
-  fetch("https://wpf06hz1-7206.euw.devtunnels.ms/api/Decision/evaluate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(requestData)
-  })
-  .then(res => {
-    if (!res.ok) throw new Error("API hatası");
-    return res.json();
-  })
-  .then(data => {
-    renderResults(data, requestData);
-  })
-  .catch(err => {
-    console.log("Bağlantı hatası:", err);
-    // Hata durumunda boş kalmaması için basit bir uyarı veya fake data eklenebilir
-  });
-};
-
-function renderResults(data, requestData) {
-  // Üst özet bilgilerini doldur
-  document.getElementById("summaryMissionType").innerText = data.missionType || "-";
-  document.getElementById("summaryPlatformSize").innerText = data.platformSize || "-";
-  document.getElementById("summaryBudgetLevel").innerText = requestData.budgetLevel || "-";
-  
-  // Backend'den gelen veriye göre (requireThermal/vibration isimlerine dikkat)
-  document.getElementById("summaryThermalTest").innerText = requestData.requireThermal ? "Evet" : "Hayır";
-  document.getElementById("summaryVibrationTest").innerText = requestData.requireVibration ? "Evet" : "Hayır";
-
-  const recDiv = document.getElementById("recommendations");
-  const riskDiv = document.getElementById("risks");
-
-  recDiv.innerHTML = "";
-  riskDiv.innerHTML = "";
-
-  // 1. ŞİRKET KARTLARINI ÇİZ (Yeni etiketli sistem)
-  data.recommendations.forEach(item => {
-    // Yeşil Etiketler (Uyanlar) - Tırnaklar eklendi!
-    const matchedHtml = item.matchedFeatures.map(f => 
-        `<span style="background:#064e3b; color:#34d399; padding:4px 10px; border-radius:12px; font-size:11px; margin-right:5px; display:inline-block; margin-bottom:5px; border: 1px solid #059669;">✓ ${f}</span>`
-    ).join("");
-
-    // Kırmızı Etiketler (Eksikler) - Tırnaklar eklendi!
-    const missingHtml = item.missingFeatures.map(f => 
-        `<span style="background:#450a0a; color:#f87171; padding:4px 10px; border-radius:12px; font-size:11px; margin-right:5px; display:inline-block; margin-bottom:5px; border: 1px solid #991b1b;">✗ ${f}</span>`
-    ).join("");
-
-    recDiv.innerHTML += `
-      <div class="partner" style="margin-bottom:25px; background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px;">
-        <b style="font-size:20px; color:#93c5fd; display:block; margin-bottom:8px;">${item.companyName}</b>
-        <p style="margin:10px 0; color:#cbd5e1; font-size:14px;">${item.explanation}</p>
-        <div class="features" style="margin-top:12px;">
-            <div style="margin-bottom:8px;">${matchedHtml}</div>
-            <div>${missingHtml}</div>
-        </div>
-        <div style="margin-top:15px; padding-top:10px; border-top: 1px solid #334155;">
-            <span style="background:#22c55e; color:#052e16; padding:5px 15px; border-radius:20px; font-weight:bold; font-size:14px;">Skor: ${item.score}</span>
-        </div>
-      </div>
-    `;
-  });
-
-  // 2. GENEL RİSKLERİ ÇİZ
-  if(data.risks && data.risks.length > 0) {
-      data.risks.forEach(r => {
-        // Buradaki tırnak hatası da düzeltildi!
-        riskDiv.innerHTML += `<p style="color:#f87171; font-size:14px; background:#450a0a; padding:10px; border-radius:8px; margin-bottom:8px; border-left:4px solid #ef4444;">⚠️ ${r}</p>`;
-      });
-  } else {
-      riskDiv.innerHTML = "<p style='color:#94a3b8;'>Düşük risk seviyesi tespit edildi.</p>";
-  }
+function renderError() {
+  document.getElementById("recommendations").innerHTML = `
+    <div class="empty-state">
+      <div><strong>Analiz getirilemedi.</strong><br>API bağlantısını kontrol edip tekrar deneyin.</div>
+    </div>
+  `;
+  document.getElementById("missing").innerHTML = `<div class="notice warn">Eksik kapasite bilgisi alınamadı.</div>`;
+  document.getElementById("risks").innerHTML = `<div class="notice warn">Risk bilgisi alınamadı.</div>`;
 }
 </script>
-
 </body>
 </html>

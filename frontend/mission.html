@@ -5,110 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mission Input - ORBITA</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
       margin: 0;
-      padding: 32px;
-      background: #0f172a;
+      padding: 32px 20px;
+      background:
+        radial-gradient(circle at top, rgba(59,130,246,0.12), transparent 28%),
+        #0f172a;
       color: white;
+      min-height: 100vh;
     }
-
-    .container {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: #1e293b;
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-
-    h1 {
-      margin-top: 0;
-      font-size: 32px;
-    }
-
-    .subtitle {
+    .container { max-width: 760px; margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
       color: #cbd5e1;
-      margin-bottom: 24px;
     }
-
+    .topbar-badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(30,41,59,0.95);
+      border: 1px solid rgba(148,163,184,0.2);
+      font-size: 13px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98));
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 18px 42px rgba(0,0,0,0.32);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+    h1 { margin-top: 0; margin-bottom: 10px; font-size: 34px; }
+    .subtitle { color: #cbd5e1; margin-bottom: 26px; line-height: 1.6; }
+    .section-title {
+      font-size: 14px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: #93c5fd;
+      margin: 26px 0 14px;
+      font-weight: bold;
+    }
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
       color: #e2e8f0;
     }
-
     select, button {
       width: 100%;
-      padding: 14px;
-      border-radius: 12px;
+      padding: 15px 16px;
+      border-radius: 14px;
       border: none;
       margin-bottom: 18px;
       font-size: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
     }
-
     select {
       background: #f8fafc;
       color: #0f172a;
+      border: 1px solid transparent;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
     }
-
-    button {
-      background: #3b82f6;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+    select:hover, select:focus {
+      outline: none;
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
     }
-
-    button:hover {
-      opacity: 0.95;
-    }
-
-    .back-button {
-      background: #475569;
-    }
-
     .checkbox-group {
-      margin-bottom: 20px;
-      background: #334155;
-      border-radius: 12px;
-      padding: 14px;
+      margin-bottom: 22px;
+      background: rgba(51, 65, 85, 0.78);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(148,163,184,0.14);
+      display: grid;
+      gap: 12px;
     }
-
     .checkbox-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(15,23,42,0.32);
+      transition: background 0.2s ease, transform 0.2s ease;
     }
-
-    .checkbox-item:last-child {
-      margin-bottom: 0;
+    .checkbox-item:hover {
+      background: rgba(30,41,59,0.95);
+      transform: translateY(-1px);
     }
-
     .checkbox-item input {
       width: auto;
       transform: scale(1.2);
+      accent-color: #3b82f6;
     }
-
-    .checkbox-item label {
-      margin: 0;
-      font-weight: normal;
+    .checkbox-item label { margin: 0; font-weight: 600; }
+    .actions {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .primary-btn {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 14px 28px rgba(37,99,235,0.28);
+      position: relative;
+    }
+    .primary-btn:hover, .back-button:hover {
+      transform: translateY(-2px);
+      opacity: 0.98;
+    }
+    .primary-btn.loading {
+      pointer-events: none;
+      opacity: 0.9;
+    }
+    .primary-btn.loading::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+      animation: spin 0.8s linear infinite;
+    }
+    .back-button {
+      background: transparent;
+      color: #e2e8f0;
+      border: 1.5px solid #64748b;
+      cursor: pointer;
+    }
+    .helper-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .helper-card {
+      background: rgba(15,23,42,0.55);
+      border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 16px;
+      padding: 14px;
+      color: #cbd5e1;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .helper-card strong { display: block; color: #f8fafc; margin-bottom: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 768px) {
+      .card { padding: 22px; }
+      .actions, .helper-grid { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="topbar">
+      <div class="topbar-badge">🚀 Mission Setup</div>
+      <div class="topbar-badge">Partner matching için görev bilgilerini gir</div>
+    </div>
+
     <div class="card">
       <h1>Görev Bilgileri</h1>
-      <p class="subtitle">Görevinizi tanımlayın, biz sizin için uygun partnerleri analiz edelim.</p>
+      <p class="subtitle">Görevinizi tanımlayın. ORBITA; uygun partnerleri, eksik kabiliyetleri ve kritik riskleri tek akışta analiz etsin.</p>
+
+      <div class="section-title">Temel Görev Parametreleri</div>
 
       <label for="missionType">Görev Türü</label>
       <select id="missionType">
@@ -132,45 +201,56 @@
         <option value="High">Yüksek</option>
       </select>
 
-      <label>Test İhtiyaçları</label>
+      <div class="section-title">Test İhtiyaçları</div>
       <div class="checkbox-group">
         <div class="checkbox-item">
           <input type="checkbox" id="thermalTest">
-          <label for="thermalTest">Thermal Test</label>
+          <label for="thermalTest">🌡️ Thermal Test</label>
         </div>
-
         <div class="checkbox-item">
           <input type="checkbox" id="vibrationTest">
-          <label for="vibrationTest">Vibration Test</label>
+          <label for="vibrationTest">🛰️ Vibration Test</label>
         </div>
       </div>
 
-      <button onclick="goToResults()">Analiz Et</button>
-      <button class="back-button" onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
+      <div class="actions">
+        <button id="analyzeBtn" class="primary-btn" onclick="goToResults()">Analiz Et</button>
+        <button class="back-button" onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
+      </div>
+
+      <div class="helper-grid">
+        <div class="helper-card"><strong>🤝 Smart Match</strong> Uygun partnerleri önceliklendirir.</div>
+        <div class="helper-card"><strong>⚠️ Risk View</strong> Kritik uyumsuzlukları görünür yapar.</div>
+        <div class="helper-card"><strong>📊 Gap Detection</strong> Eksik test ve yetkinlikleri özetler.</div>
+      </div>
     </div>
   </div>
 
   <script>
-   function goToResults() {
-  const missionType = document.getElementById("missionType").value;
-  const platformSize = document.getElementById("platformSize").value;
-  const budgetLevel = document.getElementById("budgetLevel").value;
-  
-  // İsimleri senin Backend ile uyumlu hale getirdik:
-  const requireThermal = document.getElementById("thermalTest").checked;
-  const requireVibration = document.getElementById("vibrationTest").checked;
+    function goToResults() {
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const missionType = document.getElementById("missionType").value;
+      const platformSize = document.getElementById("platformSize").value;
+      const budgetLevel = document.getElementById("budgetLevel").value;
+      const requireThermal = document.getElementById("thermalTest").checked;
+      const requireVibration = document.getElementById("vibrationTest").checked;
 
-  const requestData = {
-    missionType: missionType,
-    platformSize: platformSize,
-    budgetLevel: budgetLevel,
-    requireThermal: requireThermal, // Backend bunu bekliyor
-    requireVibration: requireVibration // Backend bunu bekliyor
-  };
+      const requestData = {
+        missionType: missionType,
+        platformSize: platformSize,
+        budgetLevel: budgetLevel,
+        requireThermal: requireThermal,
+        requireVibration: requireVibration
+      };
 
-  localStorage.setItem("missionRequest", JSON.stringify(requestData));
-  window.location.href = "results.html";
-}
+      analyzeBtn.classList.add("loading");
+      analyzeBtn.textContent = "Analiz ediliyor...";
+
+      localStorage.setItem("missionRequest", JSON.stringify(requestData));
+      setTimeout(() => {
+        window.location.href = "results.html";
+      }, 500);
+    }
   </script>
 </body>
 </html>
