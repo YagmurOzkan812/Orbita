@@ -1,0 +1,17 @@
+"recommendations": [
+  {
+    "companyName": "Orbital Dynamics",
+    "score": 90,
+    "explanation": "Selected due to strong subsystem coverage."
+  },
+  {
+    "companyName": "StellarCore Engineering",
+    "score": 82,
+    "explanation": "Recommended for strong mission alignment and high experience."
+  },
+  {
+    "companyName": "Orbitronix",
+    "score": 75,
+    "explanation": "Included due to good subsystem compatibility."
+  }
+]
