@@ -3,228 +3,561 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mission Input - ORBITA</title>
+  <title>Mission Setup • ORBİTA</title>
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    :root {
+      --text: #ffffff;
+      --muted: #d6deea;
+      --muted-soft: #9fb0c7;
+      --blue: #3b82f6;
+      --blue-strong: #2563eb;
+      --panel: rgba(8, 18, 34, 0.44);
+      --panel-strong: rgba(8, 18, 34, 0.62);
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --container: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      padding: 32px 20px;
-      background:
-        radial-gradient(circle at top, rgba(59,130,246,0.12), transparent 28%),
-        #0f172a;
-      color: white;
-      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      background: #040b16;
     }
-    .container { max-width: 760px; margin: 0 auto; }
-    .topbar {
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(90deg, rgba(3,10,20,0.84) 0%, rgba(3,10,20,0.62) 40%, rgba(3,10,20,0.34) 100%),
+        linear-gradient(180deg, rgba(3,10,20,0.18), rgba(3,10,20,0.62)),
+        url("frontendneptune.jpg") center right / cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 8% 14%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1.5px 1.5px at 16% 34%, rgba(255,255,255,0.85), transparent),
+        radial-gradient(2px 2px at 28% 18%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 42% 11%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(2px 2px at 57% 24%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 71% 14%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 84% 20%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 90% 38%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 12% 62%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 24% 72%, rgba(255,255,255,0.65), transparent),
+        radial-gradient(2px 2px at 38% 66%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 53% 78%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 75% 66%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1.5px 1.5px at 88% 76%, rgba(255,255,255,0.65), transparent);
+      opacity: 0.55;
+    }
+
+    .overlay-glow {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 72% 24%, rgba(96,165,250,0.22), transparent 16%),
+        radial-gradient(circle at 18% 78%, rgba(37,99,235,0.10), transparent 18%);
+    }
+
+    .page {
+      width: min(var(--container), calc(100% - 48px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .navbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-      color: #cbd5e1;
+      gap: 18px;
+      margin-bottom: 30px;
     }
-    .topbar-badge {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(30,41,59,0.95);
-      border: 1px solid rgba(148,163,184,0.2);
-      font-size: 13px;
+
+    .logo {
+      font-weight: 900;
+      letter-spacing: 0.10em;
+      font-size: 18px;
     }
-    .card {
-      background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98));
-      border-radius: 24px;
-      padding: 30px;
-      box-shadow: 0 18px 42px rgba(0,0,0,0.32);
-      border: 1px solid rgba(148,163,184,0.14);
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
     }
-    h1 { margin-top: 0; margin-bottom: 10px; font-size: 34px; }
-    .subtitle { color: #cbd5e1; margin-bottom: 26px; line-height: 1.6; }
-    .section-title {
+
+    .nav a {
+      color: var(--muted);
       font-size: 14px;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      color: #93c5fd;
-      margin: 26px 0 14px;
-      font-weight: bold;
+      padding: 10px 12px;
+      border-radius: 999px;
+      transition: 0.22s ease;
     }
+
+    .nav a:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .hero-layout {
+      min-height: calc(100vh - 120px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      padding: 24px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(96,165,250,0.18);
+      color: #dbeafe;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(52px, 6.2vw, 86px);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      max-width: 720px;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.9;
+    }
+
+    .form-wrap {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .form-panel {
+      width: 100%;
+      max-width: 620px;
+      padding: 34px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(7,16,31,0.62), rgba(7,16,31,0.46));
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .form-panel-header {
+      margin-bottom: 8px;
+    }
+
+    .form-title {
+      margin: 0 0 10px;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .form-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      color: #9fc7ff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin: 0;
+    }
+
     label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #e2e8f0;
+      margin-bottom: 9px;
+      color: #edf4ff;
+      font-size: 14px;
+      font-weight: 700;
     }
-    select, button {
-      width: 100%;
-      padding: 15px 16px;
-      border-radius: 14px;
-      border: none;
-      margin-bottom: 18px;
-      font-size: 16px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-    }
+
     select {
-      background: #f8fafc;
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.16);
+      background: rgba(255,255,255,0.96);
       color: #0f172a;
-      border: 1px solid transparent;
-      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
+      font-size: 15px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+      transition: 0.22s ease;
     }
-    select:hover, select:focus {
+
+    select:hover,
+    select:focus {
       outline: none;
       border-color: #60a5fa;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.14);
+      transform: translateY(-1px);
     }
+
     .checkbox-group {
-      margin-bottom: 22px;
-      background: rgba(51, 65, 85, 0.78);
-      border-radius: 16px;
-      padding: 16px;
-      border: 1px solid rgba(148,163,184,0.14);
       display: grid;
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 8px;
     }
+
     .checkbox-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(15,23,42,0.32);
-      transition: background 0.2s ease, transform 0.2s ease;
+      min-height: 62px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: 0.22s ease;
     }
+
     .checkbox-item:hover {
-      background: rgba(30,41,59,0.95);
-      transform: translateY(-1px);
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(96,165,250,0.16);
     }
+
     .checkbox-item input {
-      width: auto;
-      transform: scale(1.2);
+      transform: scale(1.12);
       accent-color: #3b82f6;
-    }
-    .checkbox-item label { margin: 0; font-weight: 600; }
-    .actions {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 14px;
-      margin-top: 4px;
-    }
-    .primary-btn {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 14px 28px rgba(37,99,235,0.28);
-      position: relative;
     }
-    .primary-btn:hover, .back-button:hover {
+
+    .checkbox-item label {
+      margin: 0;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 14px 22px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.22s ease;
+    }
+
+    .btn:hover {
       transform: translateY(-2px);
-      opacity: 0.98;
     }
-    .primary-btn.loading {
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 14px 26px rgba(37,99,235,0.26);
+      border: none;
+    }
+
+    .btn-secondary {
+      color: white;
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .analyze-btn.loading {
       pointer-events: none;
-      opacity: 0.9;
+      opacity: 0.92;
     }
-    .primary-btn.loading::after {
+
+    .analyze-btn.loading::after {
       content: "";
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
       border: 2px solid rgba(255,255,255,0.35);
       border-top-color: #fff;
       border-radius: 50%;
-      display: inline-block;
-      vertical-align: middle;
-      margin-left: 10px;
       animation: spin 0.8s linear infinite;
     }
-    .back-button {
-      background: transparent;
-      color: #e2e8f0;
-      border: 1.5px solid #64748b;
-      cursor: pointer;
-    }
-    .helper-grid {
+
+    .info-strip {
+      margin-top: 24px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 18px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
-    .helper-card {
-      background: rgba(15,23,42,0.55);
-      border: 1px solid rgba(148,163,184,0.12);
-      border-radius: 16px;
-      padding: 14px;
-      color: #cbd5e1;
+
+    .info-card {
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(7,16,31,0.40);
+      border: 1px solid rgba(255,255,255,0.07);
+      backdrop-filter: blur(6px);
+      box-shadow: var(--shadow);
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .info-card span {
+      color: var(--muted-soft);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.7;
     }
-    .helper-card strong { display: block; color: #f8fafc; margin-bottom: 6px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        gap: 28px;
+        padding: 30px 0 10px;
+      }
+
+      .form-wrap {
+        justify-content: flex-start;
+      }
+
+      .hero-copy {
+        max-width: 760px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .card { padding: 22px; }
-      .actions, .helper-grid { grid-template-columns: 1fr; }
-      .topbar { flex-direction: column; align-items: flex-start; }
+      .page {
+        width: min(100% - 22px, 100%);
+        padding-top: 20px;
+      }
+
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        gap: 6px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .form-panel {
+        padding: 24px;
+      }
+
+      .form-title {
+        font-size: 34px;
+      }
+
+      .checkbox-group,
+      .info-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        justify-content: flex-start;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topbar">
-      <div class="topbar-badge">🚀 Mission Setup</div>
-      <div class="topbar-badge">Partner matching için görev bilgilerini gir</div>
-    </div>
+  <div class="bg"></div>
+  <div class="overlay-glow"></div>
 
-    <div class="card">
-      <h1>Görev Bilgileri</h1>
-      <p class="subtitle">Görevinizi tanımlayın. ORBITA; uygun partnerleri, eksik kabiliyetleri ve kritik riskleri tek akışta analiz etsin.</p>
+  <main class="page">
+    <header class="navbar">
+      <div class="logo">ORBİTA</div>
 
-      <div class="section-title">Temel Görev Parametreleri</div>
+      <nav class="nav">
+        <a href="index.html">Ana Sayfa</a>
+        <a href="mission.html">Missions</a>
+        <a href="#">Platform</a>
+        <a href="#">İletişim</a>
+      </nav>
+    </header>
 
-      <label for="missionType">Görev Türü</label>
-      <select id="missionType">
-        <option value="Earth Observation">Yer Gözlem</option>
-        <option value="Communication">Haberleşme</option>
-        <option value="Tech Demo">Teknoloji Demo</option>
-        <option value="Research">Araştırma</option>
-      </select>
+    <section class="hero-layout">
+      <div class="hero-copy">
+        <div class="eyebrow">Mission Setup</div>
 
-      <label for="platformSize">Platform Boyutu</label>
-      <select id="platformSize">
-        <option value="1U">1U</option>
-        <option value="3U" selected>3U</option>
-        <option value="6U">6U</option>
-      </select>
+        <h1>
+          Görev planlamasını
+          daha sade, daha net,
+          daha premium hale getir.
+        </h1>
 
-      <label for="budgetLevel">Bütçe Seviyesi</label>
-      <select id="budgetLevel">
-        <option value="Low">Düşük</option>
-        <option value="Medium" selected>Orta</option>
-        <option value="High">Yüksek</option>
-      </select>
-
-      <div class="section-title">Test İhtiyaçları</div>
-      <div class="checkbox-group">
-        <div class="checkbox-item">
-          <input type="checkbox" id="thermalTest">
-          <label for="thermalTest">🌡️ Thermal Test</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="vibrationTest">
-          <label for="vibrationTest">🛰️ Vibration Test</label>
-        </div>
+        <p class="lead">
+          ORBİTA ile görev ihtiyaçlarını tek bir akışta tanımla; partner uyumu,
+          test gereksinimleri ve kritik riskleri modern bir ürün deneyimi içinde analiz et.
+        </p>
       </div>
 
-      <div class="actions">
-        <button id="analyzeBtn" class="primary-btn" onclick="goToResults()">Analiz Et</button>
-        <button class="back-button" onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
+      <div class="form-wrap">
+        <section class="form-panel" id="form">
+          <div class="eyebrow">Orbital Input Layer</div>
+
+          <div class="form-panel-header">
+            <h2 class="form-title">Görev Bilgileri</h2>
+            <p class="form-subtitle">
+              Görev parametrelerini seçin. Sistem, uygun partnerleri ve olası riskleri değerlendirsin.
+            </p>
+          </div>
+
+          <div class="section-title">Temel Görev Parametreleri</div>
+
+          <div class="fields">
+            <div class="field">
+              <label for="missionType">Görev Türü</label>
+              <select id="missionType">
+                <option value="Earth Observation">Yer Gözlem</option>
+                <option value="Communication">Haberleşme</option>
+                <option value="Tech Demo">Teknoloji Demo</option>
+                <option value="Research">Araştırma</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="platformSize">Platform Boyutu</label>
+              <select id="platformSize">
+                <option value="1U">1U</option>
+                <option value="3U" selected>3U</option>
+                <option value="6U">6U</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="budgetLevel">Bütçe Seviyesi</label>
+              <select id="budgetLevel">
+                <option value="Low">Düşük</option>
+                <option value="Medium" selected>Orta</option>
+                <option value="High">Yüksek</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="section-title">Test İhtiyaçları</div>
+
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="thermalTest" />
+              <label for="thermalTest">🌡️ Thermal Test</label>
+            </div>
+
+            <div class="checkbox-item">
+              <input type="checkbox" id="vibrationTest" />
+              <label for="vibrationTest">🛰️ Vibration Test</label>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="analyzeBtn" class="btn btn-primary analyze-btn" onclick="goToResults()">
+              Analiz Et
+            </button>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+              Ana Sayfa
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="info-strip">
+      <div class="info-card">
+        <strong>Smart Match</strong>
+        <span>Göreve uygun partnerleri önceliklendirir.</span>
       </div>
 
-      <div class="helper-grid">
-        <div class="helper-card"><strong>🤝 Smart Match</strong> Uygun partnerleri önceliklendirir.</div>
-        <div class="helper-card"><strong>⚠️ Risk View</strong> Kritik uyumsuzlukları görünür yapar.</div>
-        <div class="helper-card"><strong>📊 Gap Detection</strong> Eksik test ve yetkinlikleri özetler.</div>
+      <div class="info-card">
+        <strong>Risk View</strong>
+        <span>Kritik uyumsuzlukları erken görünür kılar.</span>
       </div>
-    </div>
-  </div>
+
+      <div class="info-card">
+        <strong>Gap Detection</strong>
+        <span>Eksik test ve capability alanlarını netleştirir.</span>
+      </div>
+    </section>
+  </main>
 
   <script>
     function goToResults() {
@@ -236,20 +569,21 @@
       const requireVibration = document.getElementById("vibrationTest").checked;
 
       const requestData = {
-        missionType: missionType,
-        platformSize: platformSize,
-        budgetLevel: budgetLevel,
-        requireThermal: requireThermal,
-        requireVibration: requireVibration
+        missionType,
+        platformSize,
+        budgetLevel,
+        requireThermal,
+        requireVibration
       };
 
       analyzeBtn.classList.add("loading");
-      analyzeBtn.textContent = "Analiz ediliyor...";
+      analyzeBtn.textContent = "Analiz ediliyor";
 
       localStorage.setItem("missionRequest", JSON.stringify(requestData));
+
       setTimeout(() => {
         window.location.href = "results.html";
-      }, 500);
+      }, 650);
     }
   </script>
 </body>

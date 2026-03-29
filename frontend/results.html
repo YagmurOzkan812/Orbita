@@ -1,519 +1,1195 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sonuçlar - ORBITA</title>
+  <title>ORBITA • Analysis Results</title>
   <style>
+    :root {
+      --bg: #020817;
+      --panel: rgba(15, 23, 42, 0.72);
+      --panel-strong: rgba(15, 23, 42, 0.9);
+      --panel-soft: rgba(30, 41, 59, 0.72);
+      --border: rgba(148, 163, 184, 0.14);
+      --border-strong: rgba(96, 165, 250, 0.26);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --muted-2: #94a3b8;
+      --blue: #60a5fa;
+      --blue-2: #3b82f6;
+      --green: #4ade80;
+      --green-2: #22c55e;
+      --yellow: #facc15;
+      --red: #f87171;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+    }
+
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 30px 18px 42px;
-      font-family: Arial, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(59,130,246,0.12), transparent 30%),
-        #0f172a;
-      color: white;
+    html { scroll-behavior: smooth; }
+
+   body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  background:
+    linear-gradient(90deg, rgba(2,6,23,0.9) 0%, rgba(2,6,23,0.6) 40%, rgba(2,6,23,0.3) 100%),
+    linear-gradient(rgba(2,6,23,0.4), rgba(2,6,23,0.85)),
+    url('uzay.jpg') center right / cover no-repeat;
+}
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 70px 70px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+      opacity: 0.18;
     }
-    .container { max-width: 1180px; margin: auto; }
+
+    .orbital-bg {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+      animation: pulseGlow 7s ease-in-out infinite;
+    }
+
+    .glow-1 {
+      width: 420px;
+      height: 420px;
+      background: rgba(59, 130, 246, 0.26);
+      top: -110px;
+      right: -80px;
+    }
+
+    .glow-2 {
+      width: 360px;
+      height: 360px;
+      background: rgba(168, 85, 247, 0.18);
+      left: -80px;
+      bottom: 40px;
+      animation-delay: 1.5s;
+    }
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(147, 197, 253, 0.12);
+      top: 50%;
+      right: -200px;
+      transform: translateY(-50%);
+    }
+
+    .ring-1 {
+      width: 700px;
+      height: 700px;
+      animation: spinSlow 28s linear infinite;
+    }
+
+    .ring-2 {
+      width: 860px;
+      height: 860px;
+      animation: spinSlow 42s linear infinite reverse;
+    }
+
+    .ring-3 {
+      width: 520px;
+      height: 520px;
+      right: auto;
+      left: -180px;
+      border-color: rgba(167, 139, 250, 0.08);
+      animation: spinSlow 34s linear infinite;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1280px, calc(100% - 32px));
+      margin: 28px auto 36px;
+      animation: fadeUp 0.8s ease;
+    }
+
     .hero {
-      background: linear-gradient(135deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98));
-      padding: 24px;
-      border-radius: 22px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      padding: 30px;
       margin-bottom: 22px;
-      border: 1px solid rgba(148,163,184,0.14);
-      box-shadow: 0 18px 42px rgba(0,0,0,0.3);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
     }
+
+    .hero::before,
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.03), transparent 25%, transparent 72%, rgba(255,255,255,0.02));
+      pointer-events: none;
+    }
+
     .hero-top {
+      position: relative;
+      z-index: 1;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 18px;
-      margin-bottom: 18px;
+      align-items: flex-start;
       flex-wrap: wrap;
+      margin-bottom: 24px;
     }
-    .hero-title { font-size: 30px; margin: 0 0 8px; }
-    .hero-subtitle { margin: 0; color: #cbd5e1; line-height: 1.6; }
-    .status-badge {
-      background: rgba(34,197,94,0.14);
-      border: 1px solid rgba(34,197,94,0.28);
-      color: #bbf7d0;
-      padding: 10px 14px;
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
       border-radius: 999px;
-      font-size: 14px;
-      white-space: nowrap;
+      background: rgba(59, 130, 246, 0.14);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      color: #bfdbfe;
+      font-size: 13px;
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      text-transform: uppercase;
     }
+
+    .hero-title {
+      margin: 0 0 8px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 30px rgba(59, 130, 246, 0.08);
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+      max-width: 760px;
+    }
+
+    .status-box {
+      min-width: 260px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(10, 16, 30, 0.58);
+      border: 1px solid rgba(74, 222, 128, 0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .status-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #bbf7d0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    .status-value { font-size: 24px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .status-note { color: var(--muted); font-size: 13px; line-height: 1.55; }
+
     .summary-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
-    .summary-item {
-      background: rgba(51,65,85,0.7);
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(148,163,184,0.12);
-      min-height: 82px;
+
+    .summary-card,
+    .mini-stat,
+    .detail-stat,
+    .detail-section,
+    .metric-card {
+      background: rgba(15, 23, 42, 0.48);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
+
+    .summary-card {
+      padding: 18px;
+      border-radius: 20px;
+      min-height: 96px;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .summary-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.2);
+      box-shadow: 0 14px 28px rgba(2, 6, 23, 0.24);
+    }
+
     .summary-label {
       color: #93c5fd;
-      font-size: 13px;
-      margin-bottom: 8px;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      font-weight: bold;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      font-weight: 700;
     }
-    .summary-value { color: #f8fafc; font-size: 17px; font-weight: bold; }
+
+    .summary-value { font-size: 20px; font-weight: 800; color: white; line-height: 1.25; }
+
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.9fr) minmax(300px, 1fr);
+      grid-template-columns: minmax(0, 1.9fr) minmax(330px, 1fr);
       gap: 20px;
       align-items: start;
     }
-    .card {
-      background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98));
+
+    .panel {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.92));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 26px;
       padding: 22px;
-      border-radius: 20px;
+      box-shadow: var(--shadow);
       margin-bottom: 20px;
-      border: 1px solid rgba(148,163,184,0.14);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+      position: relative;
+      overflow: hidden;
     }
-    .card-title {
-      font-size: 21px;
-      margin: 0 0 16px;
+
+    .panel-title {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      margin: 0 0 18px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
     }
-    .partner {
-      background: rgba(51,65,85,0.72);
-      padding: 18px;
-      border-radius: 18px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(148,163,184,0.12);
-      box-shadow: 0 10px 24px rgba(2,6,23,0.15);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+
+    .panel-sub {
+      color: var(--muted-2);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
-    .partner:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 34px rgba(2,6,23,0.28);
-      border-color: rgba(96,165,250,0.22);
+
+    .partner-list,
+    .notice-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 16px;
     }
+
+    .partner-card {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(30, 41, 59, 0.56);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      box-shadow: 0 14px 26px rgba(2, 6, 23, 0.16);
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+      cursor: pointer;
+    }
+
+    .partner-card:hover,
+    .partner-card.active {
+      transform: translateY(-6px);
+      border-color: rgba(96, 165, 250, 0.28);
+      box-shadow: 0 24px 40px rgba(2, 6, 23, 0.26), 0 0 30px rgba(59, 130, 246, 0.08);
+    }
+
+    .partner-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -40px auto;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%);
+      pointer-events: none;
+    }
+
     .partner-head {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      align-items: center;
+      align-items: flex-start;
+      gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
-    .company-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+
+    .partner-meta { display: flex; gap: 14px; align-items: center; min-width: 0; }
+
     .logo-badge {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.24), rgba(37,99,235,0.04)), rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(147, 197, 253, 0.16);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
       color: #dbeafe;
-      box-shadow: inset 0 0 0 1px rgba(147,197,253,0.18);
+      font-weight: 800;
+      font-size: 18px;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .company-name {
-      font-size: 20px;
-      color: #dbeafe;
-      font-weight: bold;
-      margin: 0;
-    }
-    .company-subtitle { color: #94a3b8; font-size: 13px; margin-top: 3px; }
+
+    .company-name { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: white; }
+    .company-subtitle { margin-top: 5px; color: var(--muted-2); font-size: 13px; line-height: 1.5; }
+
     .score-box {
-      min-width: 210px;
-      background: rgba(15,23,42,0.65);
-      border: 1px solid rgba(34,197,94,0.18);
-      border-radius: 16px;
-      padding: 12px;
+      min-width: 240px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(6, 12, 24, 0.68);
+      border: 1px solid rgba(74, 222, 128, 0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .score-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      color: #bbf7d0;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-    .score-value { color: #86efac; font-size: 16px; }
+
+    .score-top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 10px; }
+    .score-title { color: #bbf7d0; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+    .score-value { color: white; font-size: 26px; font-weight: 800; }
+    .score-value small { color: #86efac; font-size: 13px; font-weight: 700; margin-left: 6px; }
+
     .score-track {
-      width: 100%;
-      height: 10px;
-      background: rgba(148,163,184,0.18);
-      border-radius: 999px;
-      overflow: hidden;
+      width: 100%; height: 10px; border-radius: 999px; background: rgba(148, 163, 184, 0.14); overflow: hidden; margin-bottom: 10px;
     }
+
     .score-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #22c55e, #4ade80);
+      height: 100%; border-radius: 999px; background: linear-gradient(90deg, #22c55e, #4ade80); box-shadow: 0 0 20px rgba(74, 222, 128, 0.24);
     }
-    .partner p {
-      margin: 12px 0 14px;
-      color: #cbd5e1;
-      line-height: 1.6;
-    }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .tag {
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
+
+    .score-note, .partner-text { color: var(--muted); }
+    .score-note { font-size: 12px; line-height: 1.5; }
+    .partner-text { margin: 0 0 14px; line-height: 1.75; font-size: 15px; max-width: 95%; }
+
+    .tag-section { display: grid; gap: 10px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag,
+    .feature-chip {
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      border: 1px solid transparent;
     }
-    .tag.match {
-      background: rgba(6,78,59,0.9);
-      color: #6ee7b7;
-      border: 1px solid rgba(16,185,129,0.34);
+
+    .tag.match, .feature-chip.good { background: rgba(6, 78, 59, 0.9); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.28); }
+    .tag.missing, .feature-chip.bad { background: rgba(69, 10, 10, 0.9); color: #fecaca; border-color: rgba(239, 68, 68, 0.28); }
+    .feature-chip.neutral { background: rgba(30, 41, 59, 0.95); color: #cbd5e1; border-color: rgba(148, 163, 184, 0.2); }
+
+    .partner-expand-hint {
+      margin-top: 14px;
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
-    .tag.missing {
-      background: rgba(69,10,10,0.9);
-      color: #fda4af;
-      border: 1px solid rgba(239,68,68,0.34);
+
+    .partner-detail {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(6, 12, 24, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      animation: fadeUp 0.35s ease;
     }
-    .notice-list { display: grid; gap: 10px; }
-    .notice {
-      padding: 12px 14px;
-      border-radius: 14px;
-      line-height: 1.5;
-      font-size: 14px;
-      border-left: 4px solid;
-      background: rgba(15,23,42,0.52);
-    }
-    .notice.warn { border-color: #ef4444; color: #fecaca; }
-    .notice.gap { border-color: #facc15; color: #fde68a; }
-    .notice.safe { border-color: #22c55e; color: #bbf7d0; }
-    .actions {
+
+    .detail-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 8px;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items: start;
     }
-    button {
-      padding: 14px;
-      width: 100%;
+
+    .detail-section,
+    .metric-card,
+    .detail-stat {
+      padding: 16px;
+      border-radius: 18px;
+    }
+
+    .detail-title {
+      margin: 0 0 14px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #bfdbfe;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .feature-grid,
+    .metrics-grid,
+    .detail-stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .metrics-grid,
+    .detail-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric-label,
+    .detail-stat-label {
+      color: #93c5fd;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .metric-value,
+    .detail-stat-value {
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .chart-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      min-height: 100%;
+    }
+
+    .donut-chart {
+      --size: 200px;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.25), 0 12px 24px rgba(2,6,23,0.2);
+    }
+
+    .donut-chart::before {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      background: #08101f;
+      border-radius: 50%;
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.04);
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .donut-center strong { font-size: 28px; color: white; line-height: 1; }
+    .donut-center span { margin-top: 6px; font-size: 12px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    .chart-legend { width: 100%; display: grid; gap: 8px; }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
       border-radius: 14px;
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      font-size: 13px;
+    }
+
+    .legend-left { display: flex; align-items: center; gap: 10px; color: #e2e8f0; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-value { color: #93c5fd; font-weight: 800; }
+
+    .notice {
+      padding: 14px 15px;
+      border-radius: 16px;
+      line-height: 1.65;
+      font-size: 14px;
+      border: 1px solid transparent;
+      background: rgba(15, 23, 42, 0.52);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .notice.warn { border-color: rgba(239, 68, 68, 0.18); color: #fecaca; }
+    .notice.gap { border-color: rgba(250, 204, 21, 0.18); color: #fde68a; }
+    .notice.safe { border-color: rgba(34, 197, 94, 0.18); color: #bbf7d0; }
+
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+
+    .btn {
+      position: relative;
+      border: none;
+      border-radius: 18px;
+      padding: 16px 18px;
       cursor: pointer;
       font-size: 15px;
-      font-weight: bold;
-      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      font-weight: 800;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease, border-color 0.25s ease;
+      overflow: hidden;
     }
-    button:hover { transform: translateY(-2px); opacity: 0.98; }
-    .btn-primary {
-      border: none;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      box-shadow: 0 14px 28px rgba(37,99,235,0.24);
+
+    .btn:hover { transform: translateY(-3px); }
+    .btn-primary { color: white; background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 18px 36px rgba(37, 99, 235, 0.26), 0 0 30px rgba(59,130,246,0.12); }
+    .btn-primary::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -120%; width: 70%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      transform: skewX(-24deg);
+      transition: left 0.75s ease;
     }
-    .btn-outline {
-      background: transparent;
-      color: #e2e8f0;
-      border: 1.5px solid #64748b;
-    }
+
+    .btn-primary:hover::before { left: 140%; }
+    .btn-outline { color: #e2e8f0; background: rgba(15, 23, 42, 0.38); border: 1px solid rgba(148, 163, 184, 0.2); backdrop-filter: blur(10px); }
+
     .loading-state,
     .empty-state {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      padding: 38px 20px;
       text-align: center;
-      color: #cbd5e1;
+      gap: 14px;
+      padding: 36px 20px;
+      color: var(--muted);
     }
-    .spinner {
-      width: 42px;
-      height: 42px;
+
+    .spinner,
+    .mini-spinner {
       border-radius: 50%;
-      border: 4px solid rgba(148,163,184,0.25);
-      border-top-color: #60a5fa;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.85s linear infinite;
     }
+
+    .spinner { width: 44px; height: 44px; border: 4px solid rgba(148, 163, 184, 0.22); border-top-color: var(--blue); }
+    .mini-spinner { width: 28px; height: 28px; border: 3px solid rgba(148, 163, 184, 0.22); border-top-color: var(--blue); }
+
+    #toggleRiskBtn {
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.44);
+      color: #93c5fd;
+      border: 1px solid rgba(51, 65, 85, 1);
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+
+    #toggleRiskBtn:hover { transform: translateY(-2px); background: rgba(30, 41, 59, 0.8); border-color: rgba(96, 165, 250, 0.22); }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .mini-stat { padding: 14px; border-radius: 16px; }
+    .mini-stat strong { display: block; color: white; font-size: 22px; margin-bottom: 6px; }
+    .mini-stat span { color: var(--muted); font-size: 13px; line-height: 1.45; }
+
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spinSlow { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(360deg); } }
+    @keyframes pulseGlow { 0%, 100% { opacity: 0.22; transform: scale(1); } 50% { opacity: 0.34; transform: scale(1.06); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
 
-    #toggleRiskBtn:hover {
-      background: #1e293b;
-    }
-
-    @media (max-width: 980px) {
-      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 1100px) {
+      .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .layout { grid-template-columns: 1fr; }
     }
-    @media (max-width: 640px) {
-      .summary-grid, .actions { grid-template-columns: 1fr; }
-      .hero, .card { padding: 18px; }
+
+    @media (max-width: 860px) {
+      .detail-layout { grid-template-columns: 1fr; }
+      .metrics-grid, .detail-stats-grid { grid-template-columns: 1fr; }
+      .donut-chart { --size: 170px; }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 20px, 100%); margin: 18px auto 24px; }
+      .hero, .panel { padding: 18px; border-radius: 22px; }
+      .summary-grid, .mini-stats, .actions { grid-template-columns: 1fr; }
+      .hero-title { font-size: 32px; }
+      .partner-head { flex-direction: column; align-items: stretch; }
       .score-box { min-width: 100%; }
+      .company-name { font-size: 19px; }
+      .ring-1, .ring-2, .ring-3 { display: none; }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="hero">
-    <div class="hero-top">
+  <div class="orbital-bg">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+  </div>
+
+  <div class="page">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="eyebrow">🛰️ ORBITA Intelligence Report</div>
+          <h1 class="hero-title">Mission Partner Analysis</h1>
+          <p class="hero-subtitle">
+            Partner uyumu, eksik yetkinlikler ve kritik riskler tek ekranda yeniden yorumlandı.
+            Şirket kartına tıklayarak detay metrikleri ve özellik dağılımını görebilirsin.
+          </p>
+        </div>
+
+        <div class="status-box">
+          <div class="status-label">
+            <span>Analysis Status</span>
+            <span>● Active</span>
+          </div>
+          <div class="status-value">ORBITA Ready</div>
+          <div class="status-note">
+            Görev verileri işlendi, partner önerileri ve detay metrik görünürlüğü hazırlandı.
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">Görev Türü</div>
+          <div id="summaryMissionType" class="summary-value">-</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Platform</div>
+          <div id="summaryPlatformSize" class="summary-value">-</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Bütçe</div>
+          <div id="summaryBudgetLevel" class="summary-value">-</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Thermal Test</div>
+          <div id="summaryThermalTest" class="summary-value">-</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Vibration Test</div>
+          <div id="summaryVibrationTest" class="summary-value">-</div>
+        </div>
+      </div>
+
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <strong id="statRecommendationCount">0</strong>
+          <span>Partner recommendation generated</span>
+        </div>
+        <div class="mini-stat">
+          <strong id="statMissingCount">0</strong>
+          <span>Capability gap detected</span>
+        </div>
+        <div class="mini-stat">
+          <strong id="statRiskCount">0</strong>
+          <span>Risk signal identified</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
       <div>
-        <h1 class="hero-title">Analiz Sonuçları</h1>
-        <p class="hero-subtitle">Partner uyumu, eksik yetkinlikler ve kritik riskler tek ekranda özetlendi.</p>
-      </div>
-      <div class="status-badge">🧠 ORBITA Analizi Hazır</div>
-    </div>
+        <section class="panel">
+          <h2 class="panel-title">
+            <span>🤝 Recommended Partners</span>
+            <span class="panel-sub">Scored compatibility view</span>
+          </h2>
 
-    <div class="summary-grid">
-      <div class="summary-item"><div class="summary-label">Görev Türü</div><div id="summaryMissionType" class="summary-value">-</div></div>
-      <div class="summary-item"><div class="summary-label">Platform</div><div id="summaryPlatformSize" class="summary-value">-</div></div>
-      <div class="summary-item"><div class="summary-label">Bütçe</div><div id="summaryBudgetLevel" class="summary-value">-</div></div>
-      <div class="summary-item"><div class="summary-label">Thermal Test</div><div id="summaryThermalTest" class="summary-value">-</div></div>
-      <div class="summary-item"><div class="summary-label">Vibration Test</div><div id="summaryVibrationTest" class="summary-value">-</div></div>
-    </div>
-  </div>
-
-  <div class="layout">
-    <div>
-      <div class="card">
-        <div class="card-title">🤝 Önerilen Partnerler</div>
-        <div id="recommendations">
-          <div class="loading-state">
-            <div class="spinner"></div>
-            <div><strong>Analiz ediliyor...</strong><br>Partner eşleşmeleri hazırlanıyor.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="card">
-        <div class="card-title">🧩 Eksik Kapasiteler</div>
-        <div id="missing" class="notice-list">
-          <div class="loading-state" style="padding:20px 0;">
-            <div class="spinner" style="width:28px;height:28px;border-width:3px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">⚠️ Riskler</div>
-        <div id="risks" class="notice-list"></div>
-
-        <div id="riskToggleContainer" style="text-align:center; margin-top:12px;">
-          <button id="toggleRiskBtn" onclick="toggleRisks()"
-            style="background:none; border:1px solid #334155; color:#93c5fd; padding:8px 16px; border-radius:8px; cursor:pointer;">
-            Daha fazla göster
-          </button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📍 Sonraki Aksiyon</div>
-        <div class="notice-list">
-          <div class="notice safe">En yüksek uyumluluk skoruna sahip partnerleri kısa listeye al.</div>
-          <div class="notice gap">Eksik test ve kabiliyetler için tamamlayıcı partner veya dış kaynak planı oluştur.</div>
-          <div class="notice warn">Risk kartlarında geçen başlıkları teklif ve planlama aşamasında doğrula.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="btn-outline" onclick="window.location.href='mission.html'">← Geri Dön</button>
-    <button class="btn-primary" onclick="window.location.href='index.html'">Ana Sayfaya Git</button>
-  </div>
-</div>
-
-<script>
-let allRisks = [];
-let showAllRisks = false;
-
-window.onload = function () {
-  const requestData = JSON.parse(localStorage.getItem("missionRequest"));
-
-  if (!requestData) {
-    alert("Veri bulunamadı");
-    window.location.href = "mission.html";
-    return;
-  }
-
-  document.getElementById("summaryMissionType").innerText = requestData.missionType || "-";
-  document.getElementById("summaryPlatformSize").innerText = requestData.platformSize || "-";
-  document.getElementById("summaryBudgetLevel").innerText = translateBudget(requestData.budgetLevel) || "-";
-  document.getElementById("summaryThermalTest").innerText = requestData.requireThermal ? "Gerekli" : "Yok";
-  document.getElementById("summaryVibrationTest").innerText = requestData.requireVibration ? "Gerekli" : "Yok";
-
-  fetch("https://wpf06hz1-7206.euw.devtunnels.ms/api/Decision/evaluate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(requestData)
-  })
-  .then(res => {
-    if (!res.ok) throw new Error("API hatası");
-    return res.json();
-  })
-  .then(data => {
-    renderResults(data, requestData);
-  })
-  .catch(err => {
-    console.log("Bağlantı hatası:", err);
-    renderError();
-  });
-};
-
-function translateBudget(value) {
-  const labels = { Low: "Düşük", Medium: "Orta", High: "Yüksek" };
-  return labels[value] || value;
-}
-
-function getInitials(name) {
-  if (!name) return "OP";
-  return name.split(" ").slice(0, 2).map(part => part[0]).join("").toUpperCase();
-}
-
-function normalizeScore(score) {
-  const parsed = Number(score);
-  if (Number.isNaN(parsed)) return 0;
-  return Math.max(0, Math.min(100, parsed));
-}
-
-function collectMissingCapabilities(data) {
-  const set = new Set();
-
-  if (Array.isArray(data.missingCapabilities)) {
-    data.missingCapabilities.forEach(item => item && set.add(item));
-  }
-
-  if (Array.isArray(data.recommendations)) {
-    data.recommendations.forEach(item => {
-      if (Array.isArray(item.missingFeatures)) {
-        item.missingFeatures.forEach(feature => feature && set.add(feature));
-      }
-    });
-  }
-
-  return Array.from(set);
-}
-
-function renderResults(data, requestData) {
-  const recDiv = document.getElementById("recommendations");
-  const missingDiv = document.getElementById("missing");
-
-  recDiv.innerHTML = "";
-  missingDiv.innerHTML = "";
-
-  if (!data.recommendations || data.recommendations.length === 0) {
-    recDiv.innerHTML = `
-      <div class="empty-state">
-        <div>Bu görev için partner önerisi bulunamadı.</div>
-      </div>
-    `;
-  } else {
-    data.recommendations.forEach(item => {
-      const score = normalizeScore(item.score);
-      const matchedHtml = (item.matchedFeatures || []).map(f => `
-        <span class="tag match">✓ ${f}</span>
-      `).join("");
-
-      const missingHtml = (item.missingFeatures || []).map(f => `
-        <span class="tag missing">✗ ${f}</span>
-      `).join("");
-
-      recDiv.innerHTML += `
-        <div class="partner">
-          <div class="partner-head">
-            <div class="company-wrap">
-              <div class="logo-badge">${getInitials(item.companyName)}</div>
+          <div id="recommendations" class="partner-list">
+            <div class="loading-state">
+              <div class="spinner"></div>
               <div>
-                <div class="company-name">${item.companyName || "İsimsiz Partner"}</div>
-                <div class="company-subtitle">Partner uyum değerlendirmesi</div>
-              </div>
-            </div>
-            <div class="score-box">
-              <div class="score-label">
-                <span>Uyumluluk Skoru</span>
-                <span class="score-value">${score}/100</span>
-              </div>
-              <div class="score-track">
-                <div class="score-fill" style="width:${score}%"></div>
+                <strong>Analiz hazırlanıyor...</strong><br />
+                Partner eşleşmeleri değerlendiriliyor.
               </div>
             </div>
           </div>
+        </section>
+      </div>
 
-          <p>${item.explanation || "Açıklama bulunmuyor."}</p>
+      <div>
+        <section class="panel">
+          <h2 class="panel-title">
+            <span>🧩 Missing Capabilities</span>
+            <span class="panel-sub">Gap visibility</span>
+          </h2>
+          <div id="missing" class="notice-list">
+            <div class="loading-state" style="padding: 18px 0;">
+              <div class="mini-spinner"></div>
+            </div>
+          </div>
+        </section>
 
-          ${matchedHtml ? `<div class="tag-row">${matchedHtml}</div>` : ""}
-          ${missingHtml ? `<div class="tag-row" style="margin-top:10px;">${missingHtml}</div>` : ""}
+        <section class="panel">
+          <h2 class="panel-title">
+            <span>⚠️ Risk Signals</span>
+            <span class="panel-sub">Mission critical alerts</span>
+          </h2>
+
+          <div id="risks" class="notice-list"></div>
+
+          <div id="riskToggleContainer">
+            <button id="toggleRiskBtn" onclick="toggleRisks()">Daha fazla göster</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">
+            <span>📍 Next Action</span>
+            <span class="panel-sub">Suggested workflow</span>
+          </h2>
+
+          <div class="notice-list">
+            <div class="notice safe">En yüksek uyumluluk skoruna sahip partnerleri kısa listeye al.</div>
+            <div class="notice gap">Eksik test ve kabiliyetler için tamamlayıcı partner ya da dış kaynak planı oluştur.</div>
+            <div class="notice warn">Risk kartlarında görünen başlıkları teklif ve planlama aşamasında ayrıca doğrula.</div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-outline" onclick="window.location.href='mission.html'">← Görev Bilgilerine Dön</button>
+      <button class="btn btn-primary" onclick="window.location.href='index.html'">Ana Sayfaya Git</button>
+    </div>
+  </div>
+
+  <script>
+    let allRisks = [];
+    let showAllRisks = false;
+    let activePartnerIndex = null;
+    let currentRecommendations = [];
+
+    window.onload = function () {
+      const requestData = JSON.parse(localStorage.getItem("missionRequest"));
+
+      if (!requestData) {
+        alert("Veri bulunamadı");
+        window.location.href = "mission.html";
+        return;
+      }
+
+      document.getElementById("summaryMissionType").innerText = requestData.missionType || "-";
+      document.getElementById("summaryPlatformSize").innerText = requestData.platformSize || "-";
+      document.getElementById("summaryBudgetLevel").innerText = translateBudget(requestData.budgetLevel) || "-";
+      document.getElementById("summaryThermalTest").innerText = requestData.requireThermal ? "Gerekli" : "Yok";
+      document.getElementById("summaryVibrationTest").innerText = requestData.requireVibration ? "Gerekli" : "Yok";
+
+      fetch("https://37fpx200-7206.euw.devtunnels.ms/api/Decision/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("API hatası");
+        return res.json();
+      })
+      .then(data => renderResults(data))
+      .catch(err => {
+        console.log("Bağlantı hatası:", err);
+        renderError();
+      });
+    };
+
+    function translateBudget(value) {
+      const labels = { Low: "Düşük", Medium: "Orta", High: "Yüksek" };
+      return labels[value] || value;
+    }
+
+    function getInitials(name) {
+      if (!name) return "OP";
+      return name
+        .split(" ")
+        .slice(0, 2)
+        .map(part => part[0])
+        .join("")
+        .toUpperCase();
+    }
+
+    function normalizeScore(score) {
+      const parsed = Number(score);
+      if (Number.isNaN(parsed)) return 0;
+      return Math.max(0, Math.min(100, parsed));
+    }
+
+    function normalizeRate(rate) {
+      const parsed = Number(rate);
+      if (Number.isNaN(parsed)) return 0;
+      return Math.max(0, Math.min(100, parsed));
+    }
+
+    function normalizeMissionCount(count) {
+      const parsed = Number(count);
+      if (Number.isNaN(parsed)) return 0;
+      return Math.max(0, parsed);
+    }
+
+    function normalizeMass(value) {
+      const parsed = Number(value);
+      if (Number.isNaN(parsed)) return 0;
+      return Math.max(0, parsed);
+    }
+
+    function getScoreLabel(score) {
+      if (score >= 85) return "High confidence";
+      if (score >= 65) return "Strong fit";
+      if (score >= 45) return "Moderate fit";
+      return "Limited fit";
+    }
+
+    function collectMissingCapabilities(data) {
+      const set = new Set();
+
+      if (Array.isArray(data.missingCapabilities)) {
+        data.missingCapabilities.forEach(item => item && set.add(item));
+      }
+
+      if (Array.isArray(data.recommendations)) {
+        data.recommendations.forEach(item => {
+          if (Array.isArray(item.missingFeatures)) {
+            item.missingFeatures.forEach(feature => feature && set.add(feature));
+          }
+        });
+      }
+
+      return Array.from(set);
+    }
+
+    function updateTopStats(recommendations, missingCapabilities, risks) {
+      document.getElementById("statRecommendationCount").innerText = recommendations.length || 0;
+      document.getElementById("statMissingCount").innerText = missingCapabilities.length || 0;
+      document.getElementById("statRiskCount").innerText = risks.length || 0;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatRate(value) {
+      return `%${normalizeRate(value).toFixed(1)}`;
+    }
+
+    function formatMass(value) {
+      return `${normalizeMass(value).toFixed(1)} kg`;
+    }
+
+    function getReliabilityClass(reliability) {
+      const value = String(reliability || "").toLowerCase();
+      if (value.includes("high") || value.includes("yüksek")) return "good";
+      if (value.includes("low") || value.includes("düşük")) return "bad";
+      return "neutral";
+    }
+
+    function getDeliveryClass(deliveryTime) {
+      const value = String(deliveryTime || "").toLowerCase();
+      if (value.includes("fast") || value.includes("hızlı")) return "good";
+      if (value.includes("slow") || value.includes("yavaş")) return "bad";
+      return "neutral";
+    }
+
+    function buildFeatureChips(arr, className, emptyText) {
+      if (!arr || !arr.length) {
+        return `<div class="notice safe">${escapeHtml(emptyText)}</div>`;
+      }
+
+      return `
+        <div class="feature-grid">
+          ${arr.map(x => `<span class="feature-chip ${className}">${escapeHtml(x)}</span>`).join("")}
         </div>
       `;
-    });
-  }
+    }
 
-  const missingCapabilities = collectMissingCapabilities(data);
-  if (missingCapabilities.length > 0) {
-    missingCapabilities.forEach(item => {
-      missingDiv.innerHTML += `<div class="notice gap">🧩 ${item}</div>`;
-    });
-  } else {
-    missingDiv.innerHTML = `<div class="notice safe">Belirgin bir kapasite açığı tespit edilmedi.</div>`;
-  }
+    function buildDonutChart(item) {
+      const score = normalizeScore(item.score);
+      const degree = (score / 100) * 360;
 
-  allRisks = data.risks || [];
-  showAllRisks = false;
-  renderRiskList();
-}
+      return `
+        <div class="chart-card">
+          <div class="donut-chart" style="background: conic-gradient(#22c55e 0deg ${degree}deg, rgba(51, 65, 85, 0.55) ${degree}deg 360deg)">
+            <div class="donut-center">
+              <strong>${score}</strong>
+              <span>/100 Uyum</span>
+            </div>
+          </div>
 
-function renderRiskList() {
-  const riskDiv = document.getElementById("risks");
-  const toggleBtn = document.getElementById("toggleRiskBtn");
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-left">
+                <span class="legend-dot" style="background:#22c55e"></span>
+                <span>Dolu Kısım</span>
+              </div>
+              <span class="legend-value">%${score}</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-left">
+                <span class="legend-dot" style="background:rgba(148, 163, 184, 0.45)"></span>
+                <span>Kalan Kısım</span>
+              </div>
+              <span class="legend-value">%${100 - score}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-  riskDiv.innerHTML = "";
+    function renderPartnerDetail(item) {
+      return `
+        <div class="partner-detail">
+          <div class="detail-layout">
+            <div style="display:grid; gap:16px;">
+              <div class="detail-section">
+                <h4 class="detail-title">Özellikler</h4>
+                <div style="display:grid; gap:14px;">
+                  <div>
+                    <h5 class="detail-title" style="font-size:12px; margin-bottom:10px;">Eşleşen Özellikler</h5>
+                    ${buildFeatureChips(item.matchedFeatures || [], "good", "Eşleşen özellik yok.")}
+                  </div>
+                  <div>
+                    <h5 class="detail-title" style="font-size:12px; margin-bottom:10px;">Eksik Özellikler</h5>
+                    ${buildFeatureChips(item.missingFeatures || [], "bad", "Eksik özellik yok.")}
+                  </div>
+                </div>
+              </div>
 
-  if (allRisks.length === 0) {
-    riskDiv.innerHTML = `<div class="notice safe">Düşük risk seviyesi tespit edildi.</div>`;
-    toggleBtn.style.display = "none";
-    return;
-  }
+              <div class="detail-section">
+                <h4 class="detail-title">Şirket Metrikleri</h4>
+                <div class="metrics-grid">
+                  <div class="metric-card">
+                    <div class="metric-label">Toplam Görev</div>
+                    <div class="metric-value">${normalizeMissionCount(item.totalMissions)}</div>
+                  </div>
+                  <div class="metric-card">
+                    <div class="metric-label">Başarı Oranı</div>
+                    <div class="metric-value">${formatRate(item.successRate)}</div>
+                  </div>
+                  <div class="metric-card">
+                    <div class="metric-label">Teslim Süresi</div>
+                    <div class="metric-value">
+                      <span class="feature-chip ${getDeliveryClass(item.deliveryTime)}">${escapeHtml(item.deliveryTime || "-")}</span>
+                    </div>
+                  </div>
+                  <div class="metric-card">
+                    <div class="metric-label">Kütle</div>
+                    <div class="metric-value">${formatMass(item.massKg)}</div>
+                  </div>
+                </div>
+              </div>
 
-  const visibleRisks = showAllRisks ? allRisks : allRisks.slice(0, 5);
+              <div class="detail-section">
+                <h4 class="detail-title">Ek Değerlendirme</h4>
+                <div class="detail-stats-grid">
+                  <div class="detail-stat">
+                    <div class="detail-stat-label">Reliability</div>
+                    <div class="detail-stat-value"><span class="feature-chip ${getReliabilityClass(item.reliability)}">${escapeHtml(item.reliability || "-")}</span></div>
+                  </div>
+                  <div class="detail-stat">
+                    <div class="detail-stat-label">Açıklama</div>
+                    <div class="detail-stat-value" style="font-size:14px; font-weight:600; color:#cbd5e1;">${escapeHtml(item.explanation || "Açıklama bulunmuyor.")}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  visibleRisks.forEach(r => {
-    riskDiv.innerHTML += `<div class="notice warn">⚠️ ${r}</div>`;
-  });
+            <div class="detail-section">
+              <h4 class="detail-title">Uyumluluk Skoru</h4>
+              ${buildDonutChart(item)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-  if (allRisks.length <= 5) {
-    toggleBtn.style.display = "none";
-  } else {
-    toggleBtn.style.display = "inline-block";
-    toggleBtn.innerText = showAllRisks ? "Daha az göster" : "Daha fazla göster";
-  }
-}
+    function togglePartnerDetail(index) {
+      activePartnerIndex = activePartnerIndex === index ? null : index;
+      renderRecommendationCards(currentRecommendations);
+    }
 
-function toggleRisks() {
-  showAllRisks = !showAllRisks;
-  renderRiskList();
-}
+    function renderRecommendationCards(recommendations) {
+      const recDiv = document.getElementById("recommendations");
+      recDiv.innerHTML = "";
 
-function renderError() {
-  document.getElementById("recommendations").innerHTML = `
-    <div class="empty-state">
-      <div><strong>Analiz getirilemedi.</strong><br>API bağlantısını kontrol edip tekrar deneyin.</div>
-    </div>
-  `;
-  document.getElementById("missing").innerHTML = `<div class="notice warn">Eksik kapasite bilgisi alınamadı.</div>`;
-  document.getElementById("risks").innerHTML = `<div class="notice warn">Risk bilgisi alınamadı.</div>`;
-  const toggleBtn = document.getElementById("toggleRiskBtn");
-  if (toggleBtn) toggleBtn.style.display = "none";
-}
-</script>
+      if (!recommendations.length) {
+        recDiv.innerHTML = `
+          <div class="empty-state">
+            <div>Bu görev için partner önerisi bulunamadı.</div>
+          </div>
+        `;
+        return;
+      }
+
+      recommendations.forEach((item, index) => {
+        const score = normalizeScore(item.score);
+        const isActive = activePartnerIndex === index;
+
+        const matchedHtml = (item.matchedFeatures || []).map(f => `
+          <span class="tag match">✓ ${escapeHtml(f)}</span>
+        `).join("");
+
+        const missingHtml = (item.missingFeatures || []).map(f => `
+          <span class="tag missing">✗ ${escapeHtml(f)}</span>
+        `).join("");
+
+        recDiv.innerHTML += `
+          <article class="partner-card ${isActive ? "active" : ""}" onclick="togglePartnerDetail(${index})">
+            <div class="partner-head">
+              <div class="partner-meta">
+                <div class="logo-badge">${getInitials(item.companyName)}</div>
+                <div>
+                  <h3 class="company-name">${escapeHtml(item.companyName || "İsimsiz Partner")}</h3>
+                  <div class="company-subtitle">Partner uyum değerlendirmesi • Şirket detay görünümü için tıkla</div>
+                </div>
+              </div>
+
+              <div class="score-box">
+                <div class="score-top">
+                  <div class="score-title">Uyumluluk Skoru</div>
+                  <div class="score-value">${score}<small>/100</small></div>
+                </div>
+                <div class="score-track">
+                  <div class="score-fill" style="width:${score}%"></div>
+                </div>
+                <div class="score-note">${getScoreLabel(score)}</div>
+              </div>
+            </div>
+
+            <p class="partner-text">${escapeHtml(item.explanation || "Açıklama bulunmuyor.")}</p>
+
+            <div class="tag-section">
+              ${matchedHtml ? `<div class="tag-row">${matchedHtml}</div>` : ""}
+              ${missingHtml ? `<div class="tag-row">${missingHtml}</div>` : ""}
+            </div>
+
+            <div class="partner-expand-hint">${isActive ? "Detayı gizle" : "Detayları görmek için tıkla"}</div>
+            ${isActive ? renderPartnerDetail(item) : ""}
+          </article>
+        `;
+      });
+    }
+
+    function renderResults(data) {
+      const missingDiv = document.getElementById("missing");
+      missingDiv.innerHTML = "";
+
+      const recommendations = Array.isArray(data.recommendations) ? data.recommendations : [];
+      const missingCapabilities = collectMissingCapabilities(data);
+      const risks = Array.isArray(data.risks) ? data.risks : [];
+
+      currentRecommendations = recommendations;
+      activePartnerIndex = null;
+
+      updateTopStats(recommendations, missingCapabilities, risks);
+      renderRecommendationCards(recommendations);
+
+      if (missingCapabilities.length > 0) {
+        missingCapabilities.forEach(item => {
+          missingDiv.innerHTML += `<div class="notice gap">🧩 ${escapeHtml(item)}</div>`;
+        });
+      } else {
+        missingDiv.innerHTML = `<div class="notice safe">Belirgin bir kapasite açığı tespit edilmedi.</div>`;
+      }
+
+      allRisks = risks;
+      showAllRisks = false;
+      renderRiskList();
+    }
+
+    function renderRiskList() {
+      const riskDiv = document.getElementById("risks");
+      const toggleBtn = document.getElementById("toggleRiskBtn");
+      riskDiv.innerHTML = "";
+
+      if (allRisks.length === 0) {
+        riskDiv.innerHTML = `<div class="notice safe">Düşük risk seviyesi tespit edildi.</div>`;
+        toggleBtn.style.display = "none";
+        return;
+      }
+
+      const visibleRisks = showAllRisks ? allRisks : allRisks.slice(0, 5);
+      visibleRisks.forEach(risk => {
+        riskDiv.innerHTML += `<div class="notice warn">⚠️ ${escapeHtml(risk)}</div>`;
+      });
+
+      if (allRisks.length <= 5) {
+        toggleBtn.style.display = "none";
+      } else {
+        toggleBtn.style.display = "block";
+        toggleBtn.innerText = showAllRisks ? "Daha az göster" : "Daha fazla göster";
+      }
+    }
+
+    function toggleRisks() {
+      showAllRisks = !showAllRisks;
+      renderRiskList();
+    }
+
+    function renderError() {
+      document.getElementById("recommendations").innerHTML = `
+        <div class="empty-state">
+          <div><strong>Analiz getirilemedi.</strong><br />API bağlantısını kontrol edip tekrar deneyin.</div>
+        </div>
+      `;
+
+      document.getElementById("missing").innerHTML = `<div class="notice warn">Eksik kapasite bilgisi alınamadı.</div>`;
+      document.getElementById("risks").innerHTML = `<div class="notice warn">Risk bilgisi alınamadı.</div>`;
+      document.getElementById("statRecommendationCount").innerText = "0";
+      document.getElementById("statMissingCount").innerText = "0";
+      document.getElementById("statRiskCount").innerText = "0";
+
+      const toggleBtn = document.getElementById("toggleRiskBtn");
+      if (toggleBtn) toggleBtn.style.display = "none";
+    }
+  </script>
 </body>
 </html>

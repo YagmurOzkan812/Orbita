@@ -2,135 +2,207 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ORBITA</title>
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body {
+    :root {
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --blue: #3b82f6;
+      --purple: #9333ea;
+    }
+
+    * {
       margin: 0;
-      min-height: 100vh;
-      background-image:
-        radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 35%),
-        linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.82)),
-        url("satellite.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-    }
-    .container {
-      width: 100%;
-      max-width: 880px;
-      text-align: center;
-      padding: 40px;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      border-radius: 28px;
-      background: rgba(15, 23, 42, 0.55);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
-    }
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(59,130,246,0.16);
-      border: 1px solid rgba(96,165,250,0.32);
-      color: #bfdbfe;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-    h1 {
-      font-size: clamp(48px, 8vw, 76px);
-      margin: 0 0 14px;
-      letter-spacing: 3px;
-    }
-    .subtitle {
-      color: #e2e8f0;
-      margin: 0 auto 28px;
-      font-size: 21px;
-      line-height: 1.6;
-      max-width: 680px;
-    }
-    .features-title {
-      color: #93c5fd;
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-    .features {
-      list-style: none;
       padding: 0;
-      margin: 0 auto 34px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+
+      /* 🔥 BACKGROUND (PNG FIXED) */
+      background:
+        linear-gradient(90deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.6) 40%, rgba(2,6,23,0.3) 100%),
+        linear-gradient(rgba(2,6,23,0.4), rgba(2,6,23,0.85)),
+        url('cubasatyeni.png') center right / cover no-repeat;
+
+      background-attachment: fixed;
+    }
+
+    /* GLOW */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 70% 20%, rgba(59,130,246,0.2), transparent 60%);
+      pointer-events: none;
+    }
+
+    main {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .eyebrow {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      background: rgba(59,130,246,0.15);
+      padding: 8px 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(60px, 8vw, 110px);
+      letter-spacing: 0.18em;
+      background: linear-gradient(90deg, #60a5fa, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      line-height: 1.8;
+      max-width: 700px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .subtitle span {
+      color: white;
+      font-weight: 700;
+    }
+
+    .buttons {
+      display: flex;
       gap: 16px;
+      margin-bottom: 70px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    .features li {
-      padding: 18px 16px;
-      border-radius: 18px;
-      background: rgba(30, 41, 59, 0.88);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      color: #f8fafc;
-      box-shadow: 0 12px 24px rgba(2, 6, 23, 0.22);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      line-height: 1.5;
-    }
-    .features li:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 32px rgba(2, 6, 23, 0.35);
-      border-color: rgba(96, 165, 250, 0.34);
-    }
-    .feature-icon {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .cta {
-      padding: 16px 34px;
-      font-size: 18px;
-      border: none;
+
+    .btn {
+      padding: 14px 26px;
       border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .primary {
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       color: white;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 14px 32px rgba(37, 99, 235, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 10px 30px rgba(59,130,246,0.5);
     }
-    .cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 34px rgba(37, 99, 235, 0.42);
-      opacity: 0.98;
+
+    .primary:hover {
+      transform: translateY(-4px);
     }
-    @media (max-width: 768px) {
-      .container { padding: 28px 22px; }
-      .features { grid-template-columns: 1fr; }
-      .subtitle { font-size: 18px; }
+
+    .secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--muted);
+    }
+
+    .secondary:hover {
+      color: white;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 24px;
+      min-width: 220px;
+      backdrop-filter: blur(8px);
+    }
+
+    .stat strong {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      margin-top: 80px;
+      opacity: 0.6;
+      font-size: 13px;
+    }
+
+    @media(max-width:768px){
+      .stat { width: 100%; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="eyebrow">🛰️ Hackathon Demo • CubeSat Partner Intelligence</div>
-    <h1>ORBITA</h1>
-    <p class="subtitle">Görev bazlı CubeSat partner seçimini hızlandıran, riskleri görünür kılan ve eksik yetkinlikleri anında ortaya çıkaran karar destek sistemi.</p>
 
-    <div class="features-title">Ne yapar bu sistem?</div>
-    <ul class="features">
-      <li><span class="feature-icon">🤝</span><strong>Smart Partner Matching</strong><br>Göreve en uygun şirketleri hızla öne çıkarır.</li>
-      <li><span class="feature-icon">⚠️</span><strong>Risk Analysis</strong><br>Uyumsuzluk ve operasyonel riskleri erken gösterir.</li>
-      <li><span class="feature-icon">📡</span><strong>Capability Gap Detection</strong><br>Eksik test ve kabiliyet alanlarını netleştirir.</li>
-    </ul>
+<main>
+  <div class="eyebrow">🛰️ CubeSat Partner Intelligence</div>
 
-    <button class="cta" onclick="window.location.href='./mission.html'">Analize Başla</button>
+  <h1>ORBİTA</h1>
+
+  <p class="subtitle">
+    Görev bazlı CubeSat partner seçimini hızlandıran,
+    <span>riskleri görünür kılan</span> ve
+    <span>eksik yetkinlikleri anında ortaya çıkaran</span>
+    yeni nesil karar destek sistemi.
+  </p>
+
+  <div class="buttons">
+    <button class="btn primary" onclick="window.location.href='./mission.html'">
+      Analize Başla
+    </button>
+
+    <button class="btn secondary">
+      Özellikleri Gör
+    </button>
   </div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong>%92</strong>
+      <span>Match confidence ile güçlü eşleşme</span>
+    </div>
+
+    <div class="stat">
+      <strong>24+</strong>
+      <span>Capability görünürlüğü</span>
+    </div>
+
+    <div class="stat">
+      <strong>Real-time</strong>
+      <span>Hızlı karar sistemi</span>
+    </div>
+  </div>
+
+  <footer>© 2026 ORBITA</footer>
+</main>
+
 </body>
 </html>
