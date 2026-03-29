@@ -12,16 +12,23 @@ Bu depo (repository), Orbita projesinin hem arka yüz (backend) API mimarisini h
 * **Dokümantasyon:** Projeye ait şemalar, uydu görselleri ve teknik dokümanlar.
   
 🎥 Proje Demosu
+
 https://youtu.be/xaWoo5phydA
 
 🛠️ Kullanılan Teknolojiler
+
 Backend: C#, .NET
 
-Mimari: RESTful API, Object-Oriented Programming (OOP)
+Mimari:
 
-Versiyon Kontrolü: Git & GitHub
+RESTful API, Object-Oriented Programming (OOP)
+
+Versiyon Kontrolü:
+
+Git & GitHub
 
 💻 Kurulum ve Çalıştırma
+
 Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
 
 Projeyi Klonlayın:
