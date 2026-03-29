@@ -1,4 +1,4 @@
-# 🛰️ Orbita (Orbinat)
+# 🛰️ Orbita 
 
 Orbita, **Küp Uydu (CubeSat) ve Küçük Uydu Sistemleri** üzerine geliştirilmiş kapsamlı bir yazılım projesidir. Bu proje, uydu sistemlerinin veri yönetimini, iş mantığını ve kullanıcı arayüzünü tek bir çatı altında toplamayı hedefler.
 
