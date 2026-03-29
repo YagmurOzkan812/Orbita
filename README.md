@@ -10,6 +10,9 @@ Bu depo (repository), Orbita projesinin hem arka yüz (backend) API mimarisini h
 * **Modüler Yapı:** Controller, Model ve veritabanı bağlantılarının (Database.cs) ayrıştırıldığı katmanlı mimari.
 * **Kullanıcı Arayüzü:** Uydu verilerinin ve proje detaylarının görselleştirildiği frontend birimi.
 * **Dokümantasyon:** Projeye ait şemalar, uydu görselleri ve teknik dokümanlar.
+  
+🎥 Proje Demosu
+https://youtu.be/xaWoo5phydA
 
 ## 📁 Klasör Yapısı
 Proje, temiz bir geliştirme ortamı sunmak amacıyla aşağıdaki gibi modüllere ayrılmıştır:
