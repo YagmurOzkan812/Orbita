@@ -11,11 +11,11 @@ Bu depo (repository), Orbita projesinin hem arka yüz (backend) API mimarisini h
 * **Kullanıcı Arayüzü:** Uydu verilerinin ve proje detaylarının görselleştirildiği frontend birimi.
 * **Dokümantasyon:** Projeye ait şemalar, uydu görselleri ve teknik dokümanlar.
   
-🎥 Proje Demosu
+🎥 Proje Demosu:
 
 https://youtu.be/xaWoo5phydA
 
-🛠️ Kullanılan Teknolojiler
+🛠️ Kullanılan Teknolojiler:
 
 Backend: C#, .NET
 
@@ -25,7 +25,7 @@ RESTful API, Object-Oriented Programming (OOP)
 
 Versiyon Kontrolü:
 
-Git & GitHub
+Git & GitHub:
 
 💻 Kurulum ve Çalıştırma
 
