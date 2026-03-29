@@ -14,6 +14,44 @@ Bu depo (repository), Orbita projesinin hem arka yüz (backend) API mimarisini h
 🎥 Proje Demosu
 https://youtu.be/xaWoo5phydA
 
+🛠️ Kullanılan Teknolojiler
+Backend: C#, .NET
+
+Mimari: RESTful API, Object-Oriented Programming (OOP)
+
+Versiyon Kontrolü: Git & GitHub
+
+💻 Kurulum ve Çalıştırma
+Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
+
+Projeyi Klonlayın:
+
+Bash
+git clone [https://github.com/KULLANICI_ADINIZ/Orbita.git](https://github.com/KULLANICI_ADINIZ/Orbita.git)
+Backend (API) Kurulumu:
+
+Visual Studio'da backend/OrbinatAPI/OrbinatAPI.sln dosyasını açın.
+
+Gerekli NuGet paketlerinin yüklendiğinden emin olun.
+
+Çözümü derleyip (Build) projeyi başlatın (F5).
+
+Frontend Kurulumu:
+
+frontend klasöründeki ilgili ana HTML/uygulama dosyasını tarayıcınızda veya bir canlı sunucuda (Live Server) açın.
+
+👥 Geliştiriciler
+Bu proje aşağıdaki geliştiriciler tarafından yürütülmektedir:
+
+Yağmur (Backend & Mimari)
+
+Melike (Dokümantasyon & Katkıda Bulunan)
+
+hiranur (ürün yöneticisi)
+
+📝 Lisans
+Bu proje geliştirme aşamasındadır. Tüm hakları saklıdır.
+
 ## 📁 Klasör Yapısı
 Proje, temiz bir geliştirme ortamı sunmak amacıyla aşağıdaki gibi modüllere ayrılmıştır:
 
